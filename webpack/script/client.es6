@@ -21,19 +21,40 @@ class Application extends React.Component {
     super(props);
 
     this.peer = new Peer({ key: PEERJS_API_KEY, debug: 3 });
+  }
 
+  /**
+   *  アンマウント時
+   *  @version 2016/05/02
+   *  @author ryo.aso
+   */
+  componentDidMount () {
     // 閲覧側からの接続要求をハンドリングします
     this.peer.on('call', (call) => {
       // 受信のみなのでコールバックなし
       call.answer();
       // サーバーからのStreamをVideoタグに渡す
       call.on('stream', (stream) => {
-        $('#video').attr('src', URL.createObjectURL(stream));
+        this.refs.video.src = URL.createObjectURL(stream);
       });
     });
 
     // カメラ側に接続します
     this.peer.connect(APPLICATION_KEY);
+
+    window.onbeforeunload = () => {
+      if (!this.peer.destroyed) this.peer.destroy();
+    };
+  }
+
+
+  /**
+   *  アンマウント時
+   *  @version 2016/05/02
+   *  @author ryo.aso
+   */
+  componentWillUnmount () {
+    if (!this.peer.destroyed) this.peer.destroy();
   }
 
   /**
@@ -43,7 +64,9 @@ class Application extends React.Component {
    */
   render() {
     return (
-      <video id='video' muted='muted' autoplay='autoplay' ref='video'></video>
+      <div>
+        <video id='video' autoPlay ref='video'></video>
+      </div>
     );
   }
 }

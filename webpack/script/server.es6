@@ -22,10 +22,46 @@ class Application extends React.Component {
 
     this.peer = new Peer(APPLICATION_KEY, { key: PEERJS_API_KEY, debug: 3 });
 
+    this.state = {
+      delivery: false
+    };
+  }
+
+  /**
+   *  アンマウント時
+   *  @version 2016/05/02
+   *  @author ryo.aso
+   */
+  componentWillUnmount () {
+    if (!this.peer.destroyed) this.peer.destroy();
+  }
+
+  /**
+   *  配信開始
+   *  @version 2016/05/02
+   *  @author ryo.aso
+   */
+  start () {
     // 閲覧側からの接続要求をハンドリングします
     this.peer.on('connection', (dataConnection) => {
-       var mediaConnection = this.peer.call(dataConnection.peer, props.stream);
+       var mediaConnection = this.peer.call(dataConnection.peer, window.stream);
     });
+
+    window.onbeforeunload = () => {
+      if (!this.peer.destroyed) this.peer.destroy();
+    };
+
+    this.setState({ delivery: true });
+  }
+
+  /**
+  *  配信終了
+   *  @version 2016/05/02
+   *  @author ryo.aso
+   */
+  end () {
+    this.peer.destroy();
+    this.setState({ delivery: false });
   }
 
   /**
@@ -35,7 +71,12 @@ class Application extends React.Component {
    */
   render() {
     return (
-      <div>Hello Webpakcer!!</div>
+      <div>
+        {this.state.delivery
+          ? <div onClick={this.end.bind(this)}>配信終了</div>
+          : <div onClick={this.start.bind(this)}>配信開始</div>
+        }
+      </div>
     );
   }
 }
@@ -43,7 +84,8 @@ class Application extends React.Component {
 navigator.getUserMedia(
   {video: true, audio: true},
   (stream) => {
-    ReactDOM.render(<Application {...stream} />, document.getElementById('application'));
+    window.stream = stream;
+    ReactDOM.render(<Application />, document.getElementById('application'));
   },
   (error) => {
     console.log('Failed to get local stream', error);
