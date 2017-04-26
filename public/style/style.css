@@ -1,0 +1,50 @@
+
+html{
+  height: 100%;
+}
+body{
+  height: 100%;
+}
+#application, #application > div {
+  height: 100%;
+}
+.wrap{
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
+.wrap::after{
+  content: '';
+}
+.textWrap{
+  margin: 0 auto;
+  text-align: center;
+}
+.textWrap:hover{
+  animation: start 1500ms linear;
+}
+.text{
+  font-size: 100px;
+}
+@keyframes start{
+  0%{
+    transform: rotateX(0deg);
+  }
+  10%{
+    transform: rotateX(360deg);
+  }
+  20%{
+    transform: rotateX(0deg);
+  }
+  40%{
+    transform: rotateX(360deg);
+  }
+  60%{
+    transform: rotateX(0deg);
+  }
+  100%{
+    transform: rotateX(360deg);
+  }
+}

@@ -70,12 +70,21 @@ class Application extends React.Component {
    *  @author ryo.aso
    */
   render() {
+    if (this.state.delivery) return (
+      <div className='wrap'>
+        <marquee>配信中です。STOPボタンを押すと配信を停止します</marquee>
+        <div className='textWrap'>
+          <div className='text' onClick={this.end.bind(this)}>STOP</div>
+        </div>
+      </div>
+    );
+
     return (
-      <div>
-        {this.state.delivery
-          ? <div onClick={this.end.bind(this)}>配信終了</div>
-          : <div onClick={this.start.bind(this)}>配信開始</div>
-        }
+      <div className='wrap'>
+        <marquee>待機中です。STARTボタンを押すと配信を開始します</marquee>
+        <div className='textWrap'>
+          <div className='text' onClick={this.start.bind(this)}>START</div>
+        </div>
       </div>
     );
   }
