@@ -2,6 +2,7 @@ navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia 
 
 import React from 'react'
 import ReactDOM from 'react-dom'
+import request from 'superagent'
 
 const PEERJS_API_KEY  = 'y8hl9fmr8zx5hfr';
 const APPLICATION_KEY = 'meeting-space2';
@@ -51,7 +52,12 @@ class Application extends React.Component {
       if (!this.peer.destroyed) this.peer.destroy();
     };
 
-
+    request
+      .get('/slack/start')
+      .end((err, res) => {
+        console.log(res);
+      })
+    ;
 
     this.setState({ delivery: true });
   }
@@ -63,6 +69,14 @@ class Application extends React.Component {
    */
   end () {
     this.peer.destroy();
+
+    request
+      .get('/slack/end')
+      .end((err, res) => {
+        console.log(res);
+      })
+    ;
+
     this.setState({ delivery: false });
   }
 

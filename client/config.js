@@ -16,7 +16,7 @@ module.exports = {
   context: __dirname,
   entry: entries,
   output: {
-    path: `${PROJECT_ROOT_PATH}/public/javascript`,
+    path: `${PROJECT_ROOT_PATH}/public/javascripts`,
     filename: '[name].js'
   },
   module: {
