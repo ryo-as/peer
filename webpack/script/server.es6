@@ -20,8 +20,6 @@ class Application extends React.Component {
   constructor (props) {
     super(props);
 
-    this.peer = new Peer(APPLICATION_KEY, { key: PEERJS_API_KEY, debug: 3 });
-
     this.state = {
       delivery: false
     };
@@ -42,6 +40,8 @@ class Application extends React.Component {
    *  @author ryo.aso
    */
   start () {
+    this.peer = new Peer(APPLICATION_KEY, { key: PEERJS_API_KEY, debug: 3 });
+
     // 閲覧側からの接続要求をハンドリングします
     this.peer.on('connection', (dataConnection) => {
        var mediaConnection = this.peer.call(dataConnection.peer, window.stream);
@@ -50,6 +50,8 @@ class Application extends React.Component {
     window.onbeforeunload = () => {
       if (!this.peer.destroyed) this.peer.destroy();
     };
+
+
 
     this.setState({ delivery: true });
   }
